@@ -36,23 +36,15 @@ function UserDAO(db) {
             user.email = email;
         }
 
-        this.getNextSequence("userId", function(err, id) {
-            if (err) {
-                return callback(err, null);
+        users.insert(user, function(err, result) {
+
+            if (!err) {
+                console.log("Inserted new user");
+
+                return callback(null, result[0]);
             }
 
-            user.userId = id;
-
-            users.insert(user, function(err, result) {
-
-                if (!err) {
-                    console.log("Inserted new user");
-
-                    return callback(null, result[0]);
-                }
-
-                return callback(err, null);
-            });
+            return callback(err, null);
         });
     };
 
@@ -107,7 +99,7 @@ function UserDAO(db) {
 
     this.getUserById = function(userId, callback) {
         users.findOne({
-            userId: userId
+            _id: userId
         }, callback);
     };
 
@@ -115,30 +107,6 @@ function UserDAO(db) {
         users.findOne({
             userName: userName
         }, callback);
-    };
-
-    this.getNextSequence = function(name, callback) {
-
-        if (name) {
-            name = name.toLowerCase();
-        }
-
-        db.collection("counters").findAndModify({
-                _id: name
-            }, [], {
-                $inc: {
-                    seq: 1
-                }
-            }, {
-                new: true
-            },
-            function(err, object) {
-                if (err) {
-                    return callback(err, null);
-                }
-                callback(null, object.seq);
-            }
-        );
     };
 }
 

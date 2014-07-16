@@ -25,7 +25,7 @@ function BenefitsDAO(db) {
     this.updateBenefits = function(userId, startDate, callback) {
 
         usersCollection.update({
-            userId: userId
+            _id: userId
         }, {
             $set: {
                 benefitStartDate: startDate

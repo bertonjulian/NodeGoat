@@ -53,7 +53,7 @@ function ContributionsDAO(db) {
 
     this.getByUserId = function(userId, callback) {
         contributionsDB.findOne({
-            userId: userId
+            _id: userId
         }, function(err, contributions) {
 
             if (err) return callback(err, null);

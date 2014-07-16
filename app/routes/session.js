@@ -15,7 +15,7 @@ function SessionHandler(db) {
         var funds = Math.floor((Math.random() * 40) + 1);
         var bonds = 100 - (stocks + funds);
 
-        allocationsDAO.update(user.userId, stocks, funds, bonds, function(err) {
+        allocationsDAO.update(user._id, stocks, funds, bonds, function(err) {
             if (err) return next(err);
         });
     };
@@ -86,7 +86,7 @@ function SessionHandler(db) {
                 }
             }
             //req.session.regenerate(function() {
-            req.session.userId = user.userId;
+            req.session.userId = user._id;
             if (user.isAdmin) {
                 return res.redirect("/benefits");
             } else {
@@ -197,18 +197,9 @@ function SessionHandler(db) {
 
                     //prepare data for the user
                     prepareUserData(user, next);
-                    /*
-                    sessionDAO.startSession(user.userId, function(err, sessionId) {
 
-                        if (err) return next(err);
-
-                        res.cookie("session", sessionId);
-                        req.session.userId = user.userId;
-                        return res.render("dashboard", user);
-                    });
-                    */
                     req.session.regenerate(function() {
-                        req.session.userId = user.userId;
+                        req.session.userId = user._id;
                         return res.render("dashboard", user);
                     });
 

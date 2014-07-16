@@ -36,6 +36,7 @@ function ProfileDAO(db) {
 
         // Create user document
         var user = {
+            _id: userId,
             firstName: firstName,
             lastName: lastName,
             // Insecure storage of ssn and DOB
@@ -51,7 +52,7 @@ function ProfileDAO(db) {
         };
 
         users.update({
-            userId: userId
+            _id: userId
         }, {
             $set: user
         }, function(err, result) {
@@ -67,7 +68,7 @@ function ProfileDAO(db) {
 
     this.getByUserId = function(userId, callback) {
         users.findOne({
-            userId: userId
+            _id: userId
         }, function(err, user) {
 
             if (err) return callback(err, null);

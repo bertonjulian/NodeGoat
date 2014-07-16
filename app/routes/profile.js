@@ -20,8 +20,6 @@ function ProfileHandler(db) {
 
         var firstName = req.body.firstName;
 
-        //firstName = firstName.trim();
-
         var lastName = req.body.lastName;
         var ssn = req.body.ssn;
         var dob = req.body.dob;
@@ -31,12 +29,7 @@ function ProfileHandler(db) {
         profile.updateUser(userId, firstName, lastName, ssn, dob, address, function(err, user) {
 
             if (err) return next(err);
-
-            //firstName = firstName.trim();
-
-
             user.updateSuccess = true;
-            user.userId = userId;
 
             return res.render("profile", user);
         });
