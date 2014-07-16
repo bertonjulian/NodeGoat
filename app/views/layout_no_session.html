@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">{% block title %}
+    <title>OWASP Node Goat</title>
+    {% endblock %}
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/bootstrap.css" rel="stylesheet">
+
+    <!-- fav icon -->
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+    <!-- Theme CSS -->
+    <link href="vendor/theme/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="vendor/theme/font-awesome/css/font-awesome.min.css">
+
+    <style type="text/css">
+    #wrapper {
+        padding-left: 0;
+    }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <!-- top nav bar -->
+        {% include "partials/top_nav_bar.html" %}
+
+        <div id="page-wrapper">
+
+            {% block content %} {% endblock %}
+
+
+        </div>
+
+        <!-- /#page-wrapper -->
+        <div class="row">
+            <div class="col-lg-11"></div>
+            <div class="col-lg-1">
+                <span class="label label-info">v1.0.0</span>
+            </div>
+        </div>
+        <!-- /.row -->
+
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/vendor/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/bootstrap.js"></script>
+    <!-- Load live reload script -->
+    <script type="application/javascript">
+    document.write("<script src='http://" + (location.host || "localhost").split(":")[0] + ":35729/livereload.js'></" + "script>");
+
+    function areCookiesEnabled() {
+        var cookieEnabled = navigator.cookieEnabled;
+
+        // When cookieEnabled flag is present and false then cookies are disabled.
+        if (cookieEnabled === false) {
+            return false;
+        }
+
+        // try to set a test cookie if we can't see any cookies and we're using
+        // either a browser that doesn't support navigator.cookieEnabled
+        // or IE (which always returns true for navigator.cookieEnabled)
+        if (!document.cookie && (cookieEnabled === null || /*@cc_on!@*/ false)) {
+            document.cookie = "testcookie=1";
+
+            if (!document.cookie) {
+                return false;
+            } else {
+                document.cookie = "testcookie=; expires=" + new Date(0).toUTCString();
+            }
+        }
+
+        return true;
+    }
+
+    $(document).ready(function() {
+        if (!areCookiesEnabled()) {
+            $("#page-wrapper").append("<div class=\"row\"><div class=\"col-lg-12\"><div class=\"alert alert-danger\">Cookies are not enabled on your browser. Please enable cookies in your browser preferences to continue.</div></div></div>");
+        }
+    });
+    </script>
+
+</body>
+
+</html>

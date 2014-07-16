@@ -14,7 +14,7 @@ function AllocationsHandler(db) {
          */
 
         if (isNaN(userId)) {
-            return next(new Error("Invalid allocations id"));
+            return next(new Error("Invalid user id"));
         }
 
         allocationsDAO.getByUserId(userId, function(error, allocations) {

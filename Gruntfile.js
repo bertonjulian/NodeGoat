@@ -27,13 +27,18 @@ function configureGrunt(grunt) {
             }
         },
         jshint: {
-            all: ["test/**/*.js", "config/**", "app/assets/js/**", "app/data/**/*.js", "app/routes/**/*.js", "server.js"],
+            all: ["test/**/*.js", "config/**", "app/assets/js/**",
+                "app/data/**/*.js", "app/routes/**/*.js", "server.js"
+            ],
             options: {
                 jshintrc: true
             }
         },
         jsbeautifier: {
-            files: ["Gruntfile.js", "config/**", "app/views/**", "app/assets/js/**", "app/assets/css/**", "app/data/**/*.js", "app/routes/**/*.js", "server.js", "test/**/*.js"],
+            files: ["Gruntfile.js", "config/**", "app/views/**",
+                "app/assets/js/**", "app/assets/css/**", "app/data/**/*.js",
+                "app/routes/**/*.js", "server.js", "test/**/*.js"
+            ],
             options: {
                 html: {
                     braceStyle: "collapse",
@@ -72,16 +77,16 @@ function configureGrunt(grunt) {
         },
         nodemon: {
             dev: {
+                script: "server.js",
                 options: {
-                    file: "server.js",
                     args: [],
-                    ignoredFiles: ["README.md", "node_modules/**"],
-                    watchedExtensions: ["js", "html", "css"],
-                    watchedFolders: ["app/data", "app/routes", "app/assets", "app/views", "app/views/tutorial"],
+                    ignore: ["README.md", "node_modules/**"],
+                    ext: "js, html, css",
+                    watch: ["app/data", "app/routes", "app/assets", "app/views", "app/views/tutorial"],
                     debug: true,
-                    delayTime: 1,
+                    delay: 1,
                     env: {
-                        PORT: 5000
+                        PORT: 4000
                     },
                     cwd: __dirname
                 }

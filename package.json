@@ -33,7 +33,7 @@
     "grunt-mocha-test": "latest",
     "grunt-jsbeautifier": "~0.2.3"
   },
-  "repository": "https://github.com/OWASP/NodejsGoat",
+  "repository": "https://github.com/bertonjulian/NodeGoat",
   "license": "Apache 2.0",
   "private": true
 }

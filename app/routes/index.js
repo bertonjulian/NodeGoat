@@ -1,4 +1,5 @@
 var SessionHandler = require("./session");
+var UnAuthenticatedHandler = require("./unauthenticated");
 var ProfileHandler = require("./profile");
 var BenefitsHandler = require("./benefits");
 var ContributionsHandler = require("./contributions");
@@ -14,6 +15,7 @@ var exports = function(app, db) {
     var benefitsHandler = new BenefitsHandler(db);
     var contributionsHandler = new ContributionsHandler(db);
     var allocationsHandler = new AllocationsHandler(db);
+    var unAuthenticatedHandler = new UnAuthenticatedHandler();
 
     // Middleware to check if a user is logged in
     var isLoggedIn = sessionHandler.isLoggedInMiddleware;
@@ -24,9 +26,21 @@ var exports = function(app, db) {
     // The main page of the app
     app.get("/", sessionHandler.displayWelcomePage);
 
+    // Landing page
+    app.get("/home", unAuthenticatedHandler.displayHomePage);
+
     // Login form
     app.get("/login", sessionHandler.displayLoginPage);
     app.post("/login", sessionHandler.handleLoginRequest);
+
+    // About us page
+    app.get("/about", unAuthenticatedHandler.displayAboutPage);
+
+    // Contact us page
+    app.get("/contact", unAuthenticatedHandler.displayContactPage);
+
+    // chat page
+    app.get("/chat", unAuthenticatedHandler.displayChatPage);
 
     // Signup form
     app.get("/signup", sessionHandler.displaySignupPage);

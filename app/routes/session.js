@@ -224,7 +224,7 @@ function SessionHandler(db) {
 
         if (!req.session.userId) {
             console.log("welcome: Unable to identify user...redirecting to login");
-            return res.redirect("/login");
+            return res.redirect("/home");
         }
 
         userDAO.getUserById(req.session.userId, function(err, user) {
