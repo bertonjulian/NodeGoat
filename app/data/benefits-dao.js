@@ -1,3 +1,4 @@
+var ObjectID = require("mongodb").ObjectID;
 /* The BenefitsDAO must be constructed with a connected database object */
 function BenefitsDAO(db) {
 
@@ -25,7 +26,7 @@ function BenefitsDAO(db) {
     this.updateBenefits = function(userId, startDate, callback) {
 
         usersCollection.update({
-            _id: userId
+            _id: new ObjectID(userId)
         }, {
             $set: {
                 benefitStartDate: startDate

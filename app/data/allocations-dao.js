@@ -1,4 +1,5 @@
-var UserDAO = require("./user-dao").UserDAO;
+var UserDAO = require("./user-dao").UserDAO,
+    ObjectID = require("mongodb").ObjectID;
 
 
 /* The AllocationsDAO must be constructed with a connected database object */
@@ -28,7 +29,7 @@ function AllocationsDAO(db) {
         };
 
         allocationsDB.update({
-            userId: userId
+            userId: new ObjectID(userId)
         }, allocations, {
             upsert: true
         }, function(err, result) {
@@ -58,11 +59,10 @@ function AllocationsDAO(db) {
 
     this.getByUserId = function(userId, callback) {
         allocationsDB.findOne({
-            userId: userId
+            userId: new ObjectID(userId)
         }, function(err, allocations) {
-
             if (err) return callback(err, null);
-
+            if (!allocations) return callback("Could not find allocations", null);
             userDAO.getUserById(userId, function(err, user) {
 
                 if (err) return callback(err, null);

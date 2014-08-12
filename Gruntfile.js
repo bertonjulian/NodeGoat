@@ -4,6 +4,7 @@ var async = require("async");
 var DummyDataHandler = require("./dummyDataHelper");
 var dummyDataHandler = new DummyDataHandler();
 var util = require("util");
+var _ = require("underscore");
 
 function configureGrunt(grunt) {
 
@@ -267,33 +268,43 @@ function configureGrunt(grunt) {
                     function(callback) {
 
                         var admin = dummyDataHandler.getAdminUser();
-                        var users = dummyDataHandler.getNormalUsers();
+                        var users = dummyDataHandler.generateNormalUsers();
+                        var testUser = dummyDataHandler.getTestUser();
                         users.push(admin);
+                        users.push(testUser);
+
                         grunt.log.write(util.inspect(users));
                         db.collection("users").insert(users, function(err) {
-                            if (err) return next(err);
+                            if (err) return callback(err);
                             callback(null);
                         });
+                    },
 
+                    // add allocations
+                    function(callback) {
 
-                        // async.timesSeries(allUsers.length, function(index, next) {
-                        //     db.collection("users").insert(allUsers[index], function(err){
-                        //         if(err) return next(err);
-                        //         next();
-                        //     });
-                        //     },
-                        //     function (err, results) {
-                        //         if(err) return callback(err);
-                        //         callback();
-                        //     }
-                        // );
+                        db.collection("users").find({
+                            "isAdmin": {
+                                $ne: true
+                            }
+                        }).toArray(function(err, users) {
+
+                            var allocations = [];
+                            _(users).each(function(user) {
+                                allocations.push(dummyDataHandler.getAllocation(user._id));
+
+                            });
+
+                            grunt.log.write(util.inspect(allocations));
+
+                            db.collection("allocations").insert(allocations, function(err) {
+                                if (err) return callback(err);
+                                callback(null);
+                            });
+
+                        });
+
                     }
-
-                    // // add allocations
-                    // function(callback) {
-
-
-                    // },
                     // // add files to all folders
                     // function(callback) {
 

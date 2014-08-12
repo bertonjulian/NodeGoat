@@ -1,4 +1,6 @@
-var bcrypt = require("bcrypt-nodejs");
+var bcrypt = require("bcrypt-nodejs"),
+    ObjectID = require("mongodb").ObjectID;
+
 
 /* The UserDAO must be constructed with a connected database object */
 function UserDAO(db) {
@@ -99,7 +101,7 @@ function UserDAO(db) {
 
     this.getUserById = function(userId, callback) {
         users.findOne({
-            _id: userId
+            _id: new ObjectID(userId)
         }, callback);
     };
 

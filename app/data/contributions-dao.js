@@ -1,5 +1,5 @@
-var UserDAO = require("./user-dao").UserDAO;
-
+var UserDAO = require("./user-dao").UserDAO,
+    ObjectID = require("mongodb").ObjectID;
 /* The ContributionsDAO must be constructed with a connected database object */
 function ContributionsDAO(db) {
     "use strict";
@@ -25,7 +25,7 @@ function ContributionsDAO(db) {
         };
 
         contributionsDB.update({
-            userId: userId
+            userId: new ObjectID(userId)
         }, contributions, {
             upsert: true
         }, function(err, result) {
@@ -40,7 +40,7 @@ function ContributionsDAO(db) {
                     contributions.userName = user.userName;
                     contributions.firstName = user.firstName;
                     contributions.lastName = user.lastName;
-                    contributions.userId = userId;
+                    contributions.userId = new ObjectID(userId);
 
                     return callback(null, contributions);
                 });
@@ -53,7 +53,7 @@ function ContributionsDAO(db) {
 
     this.getByUserId = function(userId, callback) {
         contributionsDB.findOne({
-            _id: userId
+            userId: new ObjectID(userId)
         }, function(err, contributions) {
 
             if (err) return callback(err, null);

@@ -22,7 +22,7 @@ function BenefitsHandler(db) {
 
     this.updateBenefits = function(req, res, next) {
 
-        var userId = parseInt(req.body.userId);
+        var userId = req.session.userId;
         var benefitStartDate = req.body.benefitStartDate;
 
 
