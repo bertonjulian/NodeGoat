@@ -231,6 +231,16 @@ function configureGrunt(grunt) {
                         });
                     },
                     function(callback) {
+                        db.collection("companies", function(err, collection) {
+                            collection.remove(function(err) {
+                                if (err) return callback(err);
+                                grunt.log.ok(["companies removed"]);
+                                callback(null);
+                            });
+
+                        });
+                    },
+                    function(callback) {
                         db.collection("counters", function(err, collection) {
                             collection.remove(function(err) {
                                 if (err) return callback(err);
@@ -273,7 +283,7 @@ function configureGrunt(grunt) {
                         users.push(admin);
                         users.push(testUser);
 
-                        grunt.log.write(util.inspect(users));
+                        // grunt.log.write(util.inspect(users));
                         db.collection("users").insert(users, function(err) {
                             if (err) return callback(err);
                             callback(null);
@@ -292,10 +302,9 @@ function configureGrunt(grunt) {
                             var allocations = [];
                             _(users).each(function(user) {
                                 allocations.push(dummyDataHandler.getAllocation(user._id));
-
                             });
 
-                            grunt.log.write(util.inspect(allocations));
+                            // grunt.log.write(util.inspect(allocations));
 
                             db.collection("allocations").insert(allocations, function(err) {
                                 if (err) return callback(err);
@@ -304,13 +313,35 @@ function configureGrunt(grunt) {
 
                         });
 
+                    },
+                    // add stocks to db
+                    function(callback) {
+
+                        var stockRawData = grunt.file.readJSON("stock_symbols.json");
+
+                        var industries = stockRawData.query.results.industry;
+                        var companies = [];
+
+                        _(industries).each(function(industry) {
+                            // some industries where undefined causing issues with insert
+                            if (industry.company !== undefined) {
+                                // do not add undefined arrays to the companies array
+                                companies = companies.concat(industry.company);
+                            }
+                        });
+
+                        db.collection("companies").insert(companies, function(err) {
+                            if (err) return callback(err);
+                            db.collection("companies").ensureIndex({
+                                name: "text"
+                            }, function(err, name) {
+                                callback(null);
+                            });
+                        });
+
                     }
-                    // // add files to all folders
-                    // function(callback) {
 
-                    // },
-
-                    // // make contact with other users
+                    // add stock prices to stock companies?
                     // function(callback) {
 
 
