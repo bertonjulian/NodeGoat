@@ -49,7 +49,7 @@ $(function() {
             $currentInput = $inputMessage.focus();
 
             // Tell the server your username
-            socket.emit("add user", username);
+            socket.emit("addUserEvent", username);
         }
     }
 
@@ -65,8 +65,8 @@ $(function() {
                 username: username,
                 message: message
             });
-            // tell server to execute "new message" and send along one parameter
-            socket.emit("new message", message);
+            // tell server to execute "newMessageEvent" and send along one parameter
+            socket.emit("newMessageEvent", message);
         }
     }
 
@@ -156,7 +156,7 @@ $(function() {
         if (connected) {
             if (!typing) {
                 typing = true;
-                socket.emit("typing");
+                socket.emit("startTypingEvent");
             }
             lastTypingTime = (new Date()).getTime();
 
@@ -164,7 +164,7 @@ $(function() {
                 var typingTimer = (new Date()).getTime();
                 var timeDiff = typingTimer - lastTypingTime;
                 if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-                    socket.emit("stop typing");
+                    socket.emit("stopTypingEvent");
                     typing = false;
                 }
             }, TYPING_TIMER_LENGTH);
@@ -201,7 +201,7 @@ $(function() {
         if (event.which === 13) {
             if (username) {
                 sendMessage();
-                socket.emit("stop typing");
+                socket.emit("stopTypingEvent");
                 typing = false;
             } else {
                 setUsername();
@@ -227,8 +227,8 @@ $(function() {
 
     // Socket events
 
-    // Whenever the server emits "login", log the login message
-    socket.on("login", function(data) {
+    // Whenever the server emits "loginEvent", log the login message
+    socket.on("loginEvent", function(data) {
         connected = true;
         // Display the welcome message
         var message = "You are online. Chat with other users or talk to one of our staff for help";
@@ -238,31 +238,31 @@ $(function() {
         addParticipantsMessage(data);
     });
 
-    // Whenever the server emits "new message", update the chat body
-    socket.on("new message", function(data) {
+    // Whenever the server emits "newMessageEvent", update the chat body
+    socket.on("newMessageEvent", function(data) {
         addChatMessage(data);
     });
 
-    // Whenever the server emits "user joined", log it in the chat body
-    socket.on("user joined", function(data) {
+    // Whenever the server emits "userJoinedEvent", log it in the chat body
+    socket.on("userJoinedEvent", function(data) {
         log(data.username + " joined");
         addParticipantsMessage(data);
     });
 
-    // Whenever the server emits "user left", log it in the chat body
-    socket.on("user left", function(data) {
+    // Whenever the server emits "userLeftEvent", log it in the chat body
+    socket.on("userLeftEvent", function(data) {
         log(data.username + " left");
         addParticipantsMessage(data);
         removeChatTyping(data);
     });
 
     // Whenever the server emits "typing", show the typing message
-    socket.on("typing", function(data) {
+    socket.on("startTypingEvent", function(data) {
         addChatTyping(data);
     });
 
-    // Whenever the server emits "stop typing", kill the typing message
-    socket.on("stop typing", function(data) {
+    // Whenever the server emits "stopTypingEvent", kill the typing message
+    socket.on("stopTypingEvent", function(data) {
         removeChatTyping(data);
     });
 });

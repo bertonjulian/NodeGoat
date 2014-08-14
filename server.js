@@ -130,8 +130,22 @@ MongoClient.connect(config.db, function(err, db) {
 
     var ChatHandler = require("./app/routes/chat");
     var chatHandler = new ChatHandler(db);
+
+    var botHandler;
+    // ability to turn on or off the chat bot via config parameters
+    if (config.chatBotOn) {
+        var BotHandler = require("./app/util/bot");
+        botHandler = new BotHandler(db);
+        // load the AIML files into the bot interpreter 
+        botHandler.loadAIMLFiles();
+    }
+
+    // start the socket listener for the chat service
     io.on("connection", function(socket) {
-        chatHandler.setupChatService(socket);
+
+        // pass the bot handler into the chat service 
+        // to handle communication with the bot
+        chatHandler.setupChatService(socket, botHandler);
     });
 
 
