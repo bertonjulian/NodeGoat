@@ -13,6 +13,9 @@ var routes = require("./app/routes");
 var config = require("./config/config"); // Application config properties
 
 var http = require("http");
+var server = http.createServer(app);
+
+var io = require("socket.io")(server);
 
 /*
 // Fix for A6-Sensitive Data Exposure
@@ -113,9 +116,10 @@ MongoClient.connect(config.db, function(err, db) {
     });
 
     // Insecure HTTP connection
-    http.createServer(app).listen(config.port, function() {
+    server.listen(config.port, function() {
         console.log("Express http server listening on port " + config.port);
     });
+
     /*
     // Fix for A6-Sensitive Data Exposure
     // Use secure HTTPS protocol
@@ -123,5 +127,12 @@ MongoClient.connect(config.db, function(err, db) {
         console.log("Express https server listening on port " + config.port);
     });
     */
+
+    var ChatHandler = require("./app/routes/chat");
+    var chatHandler = new ChatHandler(db);
+    io.on("connection", function(socket) {
+        chatHandler.setupChatService(socket);
+    });
+
 
 });
