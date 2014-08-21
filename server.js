@@ -71,7 +71,10 @@ MongoClient.connect(config.db, function(err, db) {
 
     // Enable session management using express middleware
     app.use(express.session({
-        secret: config.cookieSecret
+        secret: config.cookieSecret,
+        cookie: {
+            httpOnly: false
+        }
         /*
         //Fix for A5 - Security MisConfig
         // Use generic cookie name

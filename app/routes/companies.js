@@ -14,6 +14,7 @@ function CompaniesHandler(db) {
             companiesDAO.getCompaniesByName(searchTerm, function(error, companies) {
                 if (error) return next(error);
                 return res.render("companies", {
+                    searchTerm: searchTerm,
                     companies: companies
                 });
             });

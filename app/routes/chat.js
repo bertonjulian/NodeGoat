@@ -28,19 +28,21 @@ function ChatHandler(db) {
         socket.on("newMessageEvent", function(msg) {
 
             // TODO: parse the message for @admin and if found send to bot for response
-            var socketId = socket.id;
-            var response = botHandler.sendMessageToBot(msg, function(answer) {
-                socket.broadcast.to(socketId).emit('newMessageEvent', {
-                    username: botHandler.getUsername(),
-                    message: answer
+            if (bot) {
+                var socketId = socket.id;
+                var response = botHandler.sendMessageToBot(msg, function(answer) {
+                    socket.broadcast.to(socketId).emit("newMessageEvent", {
+                        username: botHandler.getUsername(),
+                        message: answer
+                    });
+
                 });
-
-            });
-
-            // socket.broadcast.emit("newMessageEvent", {
-            //     username: socket.username,
-            //     message: msg
-            // });
+            } else {
+                socket.broadcast.emit("newMessageEvent", {
+                    username: socket.username,
+                    message: msg
+                });
+            }
         });
 
         // when the client emits "addUserEvent", this listens and executes

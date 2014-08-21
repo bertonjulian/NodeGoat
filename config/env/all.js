@@ -5,7 +5,7 @@ var defaultConfig = {
     cookieSecret: "session_cookie_secret_key_here",
     cryptoKey: "a_secure_key_for_crypto_here",
     cryptoAlgo: "aes256",
-    chatBotOn: true
+    chatBotOn: false
 };
 
 module.exports = defaultConfig;

@@ -24,12 +24,13 @@
 </div>
 
 
-{% if !companies %}
+{% if companies %}
 <div class="row">
-    <h3>No results found</h3>
+    <h3>No results found for: {{searchTerm}}</h3>
 </div>
-{% endif %}
+{% else %}
 
+<h3>Search results for: {{searchTerm}}</h3>
 <table class="table table-striped">
     <tr>
         <th>Name</th>
@@ -44,7 +45,4 @@
 
     {% endfor %}
 </table>
-
-
-
-{% endblock %}
+{% endif %} {% endblock %}
